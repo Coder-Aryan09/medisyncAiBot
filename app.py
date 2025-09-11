@@ -1,4 +1,3 @@
-# 1. Imports
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -6,22 +5,20 @@ from dotenv import load_dotenv
 import streamlit as st
 import os
 
-# 2. Load environment
 load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-# 3. Initialize model
+
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
 
-# 4. Initialize message history with sesssion state
-if "messages" not in st.session_state:
-    st.session_state.messages = [SystemMessage(content="You are a helpful medical assistant.")]
 
-# Template (optional)
+if "messages" not in st.session_state:
+    st.session_state.messages = [SystemMessage(content="You are a helpful medical assistant only. You are not supposed to answer any other query realted to any other topic which is no related to health condition of the patient or healthcare.")]
+
 chat_template = ChatPromptTemplate([
-    SystemMessage(content="You are a helpful medical assistant and provide accurate information to your patients with reference to his medical history."),
+    SystemMessage(content="You are a helpful medical assistant and provide accurate information to your patients with reference to his medical history. You give short responses not exceeding 80 words and keep responses as short as possible. You are not supposed to answer any other query realted to any other topic which is no related to health condition of the patient or healthcare."),
 ])
 
-# Define response generator
+# response func
 def generate_response(query):
     st.session_state.messages.append(HumanMessage(content=query))
     response = model.invoke(st.session_state.messages)
