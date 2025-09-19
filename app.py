@@ -1,11 +1,9 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
 import streamlit as st
 import os
 
-load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
@@ -38,3 +36,4 @@ with st.form("my_form"):
     if submitted and GOOGLE_API_KEY:
         output = generate_response(text)
         st.success(output)
+
